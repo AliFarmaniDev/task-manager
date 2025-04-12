@@ -1,7 +1,7 @@
-enum StatusEnum {
+enum ProjectsStatusEnum {
   // creating enums
   Enable = "enable",
   Disable = "disable",
 }
 
-export default StatusEnum;
+export default ProjectsStatusEnum;
