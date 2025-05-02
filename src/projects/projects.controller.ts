@@ -23,8 +23,13 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll(@Query('status') status?: ProjectsStatusEnum) {
-    return this.projectsService.findAll(status)
+  findAll(
+    @Query("status") status?: ProjectsStatusEnum,
+    // set page router
+    @Query("limit") limit: number = 10,
+    @Query("page") page: number = 10,
+  ) {
+    return this.projectsService.findAll(status,limit,page);
   }
 
   @Get(":id")

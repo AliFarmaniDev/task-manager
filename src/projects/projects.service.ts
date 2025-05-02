@@ -21,12 +21,14 @@ export class ProjectsService {
     }
   }
 
-  async findAll(status?: ProjectsStatusEnum) {
+  async findAll(status?: ProjectsStatusEnum, limit: number = 10 , page:number = 1) {
     const query = this.projectRepository.createQueryBuilder("projects");
     if (status) {
       // add a conditions
       query.where("projects.status = :status ", { status: status });
     }
+    // set pagenations
+    query.skip((page -1)* limit).take(limit)
     return await query.getMany();
   }
 
