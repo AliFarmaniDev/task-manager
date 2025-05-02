@@ -1,9 +1,13 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateProjectDto } from "./dto/create-project.dto";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Project } from "./entities/project.entity";
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import ProjectsStatusEnum from "./enums/projectsStatusEnum";
 
 @Injectable()
@@ -21,19 +25,34 @@ export class ProjectsService {
     }
   }
 
-  async findAll(status?: ProjectsStatusEnum, limit: number = 10 , page:number = 1) {
+  async findAll(
+    status?: ProjectsStatusEnum,
+    limit: number = 10,
+    page: number = 1,
+  ) {
     const query = this.projectRepository.createQueryBuilder("projects");
     if (status) {
       // add a conditions
       query.where("projects.status = :status ", { status: status });
     }
     // set pagenations
-    query.skip((page -1)* limit).take(limit)
+    query.skip((page - 1) * limit).take(limit);
     return await query.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async findOne(id: number) {
+    // get project  by id
+    // find one service
+    const project = await this.projectRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    // igf roject not found
+    if (!project) {
+      throw new NotFoundException(`project ${id} is not found `);
+    }
+    return project;
   }
 
   update(id: number, updateProjectDto: UpdateProjectDto) {

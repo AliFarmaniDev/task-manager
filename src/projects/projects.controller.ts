@@ -29,7 +29,7 @@ export class ProjectsController {
     @Query("limit") limit: number = 10,
     @Query("page") page: number = 10,
   ) {
-    return this.projectsService.findAll(status,limit,page);
+    return this.projectsService.findAll(status, limit, page);
   }
 
   @Get(":id")
