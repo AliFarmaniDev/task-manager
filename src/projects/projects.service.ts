@@ -66,11 +66,14 @@ export class ProjectsService {
         id,
         UpdateProjectDto,
       );
-      return updateProject
+      return updateProject;
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async remove(id: number): Promise<void> {
+    const deleteProject = await this.projectRepository.delete(id);
+    if (deleteProject.affected === 0) {
+      throw new BadRequestException(`project ${id} is not found`);
+    }
   }
 }
