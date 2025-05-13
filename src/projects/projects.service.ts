@@ -40,8 +40,6 @@ export class ProjectsService {
     return await query.getMany();
   }
 
-  
-
   async findOne(id: number) {
     // get project  by id
     // find one service
